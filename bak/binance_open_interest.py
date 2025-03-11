@@ -2,12 +2,12 @@ import requests
 import time
 import datetime
 from datetime import datetime, timezone, timedelta
+from config import BINANCE_API_URL_COIN
 
-API_URL = "https://fapi.binance.com/fapi/v1/openInterest?symbol=BTCUSDT"
 
 def get_open_interest():
     try:
-        response = requests.get(API_URL)
+        response = requests.get(BINANCE_API_URL_COIN)
         data = response.json()
 
         # 确保 API 返回的数据包含 `openInterest`

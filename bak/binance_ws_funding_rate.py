@@ -3,6 +3,7 @@ import websocket
 import datetime
 import time
 from datetime import datetime, timezone, timedelta
+from config import BINANCE_WS_URL_COIN
 
 def on_message(ws, message):
     data = json.loads(message)
@@ -40,7 +41,7 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
     payload = {
         "method": "SUBSCRIBE",
-        "params": ["btcusdt@markPrice@1s"],
+        "params": ["btcusd_perp@markPrice@1s"],
         "id": 1
     }
     ws.send(json.dumps(payload))
@@ -51,7 +52,7 @@ def start_binance_ws():
     while True:
         try:
             ws = websocket.WebSocketApp(
-                "wss://fstream.binance.com/ws/btcusdt@markPrice@1s",
+                BINANCE_WS_URL_COIN,
                 on_message=on_message,
                 on_error=on_error,
                 on_close=on_close

@@ -2,35 +2,40 @@ import asyncio
 import threading
 import uvicorn
 
-from services import okx_ws_u_perp
-from services import okx_ws_coin_perp
-from services import okx_ws_usdc_perp
 
-from services.binance_ws import start_binance_ws
+from services import okx_ws_u, okx_ws_coin, okx_ws_usdc
+from services import binance_ws_u, binance_ws_coin, binance_ws_usdc
+
+from services import binance_api_u, binance_api_coin, binance_api_usdc
 from services.bybit_ws import subscribe_bybit_funding_rate
-from services.binance_api import poll_binance_open_interest
 from services.bybit_api import poll_bybit_open_interest
 
 from api.app import app
 
 async def run_tasks():
     await asyncio.gather(
-        okx_ws_u_perp.subscribe_open_interest(),
-        okx_ws_u_perp.subscribe_mark_price(),
-        okx_ws_u_perp.subscribe_funding_rate(),
-        okx_ws_coin_perp.subscribe_open_interest(),
-        okx_ws_coin_perp.subscribe_mark_price(),
-        okx_ws_coin_perp.subscribe_funding_rate(),
-        okx_ws_usdc_perp.subscribe_open_interest(),
-        okx_ws_usdc_perp.subscribe_mark_price(),
-        okx_ws_usdc_perp.subscribe_funding_rate(),
+        okx_ws_u.subscribe_open_interest(),
+        okx_ws_u.subscribe_mark_price(),
+        okx_ws_u.subscribe_funding_rate(),
+        okx_ws_coin.subscribe_open_interest(),
+        okx_ws_coin.subscribe_mark_price(),
+        okx_ws_coin.subscribe_funding_rate(),
+        okx_ws_usdc.subscribe_open_interest(),
+        okx_ws_usdc.subscribe_mark_price(),
+        okx_ws_usdc.subscribe_funding_rate(),
+        asyncio.to_thread(binance_api_u.poll_binance_open_interest),
+        asyncio.to_thread(binance_api_coin.poll_binance_open_interest),
+        asyncio.to_thread(binance_api_usdc.poll_binance_open_interest),
         subscribe_bybit_funding_rate(),
-        asyncio.to_thread(poll_binance_open_interest),
         asyncio.to_thread(poll_bybit_open_interest)
     )
 
 def run_binance_ws():
-    binance_thread = threading.Thread(target=start_binance_ws, daemon=True)
+    binance_thread = threading.Thread(target=binance_ws_u.start_binance_ws, daemon=True)
+    binance_thread.start()
+    binance_thread = threading.Thread(target=binance_ws_coin.start_binance_ws, daemon=True)
+    binance_thread.start()
+    binance_thread = threading.Thread(target=binance_ws_usdc.start_binance_ws, daemon=True)
     binance_thread.start()
 
 if __name__ == "__main__":

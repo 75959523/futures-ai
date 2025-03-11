@@ -2,7 +2,7 @@ import json
 import websocket
 import time
 from datetime import datetime, timezone, timedelta
-from config import BINANCE_WS_URL
+from config import BINANCE_WS_URL_COIN
 import services.data_store
 
 def on_binance_message(ws, message):
@@ -26,14 +26,11 @@ def on_binance_message(ws, message):
         except ValueError:
             print(f"ValueError: Binance invalid numeric values. Data: {data}")
             return
-        services.data_store.binance_mark_price = {
-            "mark_price": round(mark_price, 2),
-            "timestamp": formatted_time
-        }
-        services.data_store.binance_funding_rate = {
-            "funding_rate": f"{funding_rate:.6f}%",
-            "timestamp": formatted_time
-        }
+
+        services.data_store.update_market_data("binance", "btc", "coin", "mark_price",
+                                               round(mark_price, 2), formatted_time)
+        services.data_store.update_market_data("binance", "btc", "coin", "funding_rate",
+                                               f"{funding_rate:.6f}%", formatted_time)
 
 def on_binance_error(ws, error):
     print(f"Binance WebSocket Error: {error}")
@@ -44,7 +41,7 @@ def on_binance_close(ws, close_status_code, close_msg):
 def on_binance_open(ws):
     payload = {
         "method": "SUBSCRIBE",
-        "params": ["btcusdt@markPrice@1s"],
+        "params": ["btcusd_perp@markPrice@1s"],
         "id": 1
     }
     ws.send(json.dumps(payload))
@@ -54,7 +51,7 @@ def start_binance_ws():
     """ Binance WebSocket 运行函数，独立启动 """
     while True:
         try:
-            ws = websocket.WebSocketApp(BINANCE_WS_URL,
+            ws = websocket.WebSocketApp(BINANCE_WS_URL_COIN,
                 on_message=on_binance_message,
                 on_error=on_binance_error,
                 on_close=on_binance_close
