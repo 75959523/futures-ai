@@ -19,7 +19,7 @@ def poll_binance_open_interest():
             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
             # 更新全局变量
-            services.data_store.binance_open_interest_data = {
+            services.data_store.binance_open_interest = {
                 "open_interest": round(float(data["openInterest"]), 2),
                 "timestamp": formatted_time
             }

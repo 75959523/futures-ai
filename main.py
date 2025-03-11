@@ -6,6 +6,8 @@ from services.okx_ws import subscribe_open_interest, subscribe_mark_price, subsc
 from services.bybit_ws import subscribe_bybit_funding_rate
 
 from services.binance_api import poll_binance_open_interest
+from services.bybit_api import poll_bybit_open_interest
+
 from api.app import app
 
 async def run_tasks():
@@ -14,7 +16,8 @@ async def run_tasks():
         subscribe_mark_price(),
         subscribe_funding_rate(),
         subscribe_bybit_funding_rate(),
-        asyncio.to_thread(poll_binance_open_interest)
+        asyncio.to_thread(poll_binance_open_interest),
+        asyncio.to_thread(poll_bybit_open_interest)
     )
 
 def run_binance_ws():

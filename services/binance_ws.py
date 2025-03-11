@@ -26,11 +26,11 @@ def on_binance_message(ws, message):
         except ValueError:
             print(f"ValueError: Binance invalid numeric values. Data: {data}")
             return
-        services.data_store.binance_mark_price_data = {
+        services.data_store.binance_mark_price = {
             "mark_price": round(mark_price, 2),
             "timestamp": formatted_time
         }
-        services.data_store.binance_funding_rate_data = {
+        services.data_store.binance_funding_rate = {
             "funding_rate": f"{funding_rate:.6f}%",
             "timestamp": formatted_time
         }

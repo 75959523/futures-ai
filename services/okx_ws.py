@@ -32,7 +32,7 @@ async def subscribe_open_interest():
                         dt_object = datetime.fromtimestamp(ts / 1000, tz=timezone.utc) + timedelta(hours=8)
                         formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-                        services.data_store.okx_open_interest_data = {
+                        services.data_store.okx_open_interest = {
                             "open_interest": round(oi_ccy, 2),
                             "timestamp": formatted_time
                         }
@@ -70,7 +70,7 @@ async def subscribe_mark_price():
                             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
                             # 更新全局变量
-                            services.data_store.okx_mark_price_data = {
+                            services.data_store.okx_mark_price = {
                                 "mark_price": round(mark_price, 2),
                                 "timestamp": formatted_time
                             }
@@ -111,7 +111,7 @@ async def subscribe_funding_rate():
                         formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
                         # 更新全局变量
-                        services.data_store.okx_funding_rate_data = {
+                        services.data_store.okx_funding_rate = {
                             "funding_rate": f"{funding_rate:.6f}%",
                             "timestamp": formatted_time
                         }

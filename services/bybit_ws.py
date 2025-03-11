@@ -28,7 +28,7 @@ async def subscribe_bybit_funding_rate(symbol="BTCUSDT"):
                             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
                             # 更新数据存储
-                            services.data_store.bybit_funding_rate_data = {
+                            services.data_store.bybit_funding_rate = {
                                 "funding_rate": f"{funding_rate:.6f}%",
                                 "timestamp": formatted_time
                             }
@@ -39,7 +39,7 @@ async def subscribe_bybit_funding_rate(symbol="BTCUSDT"):
                             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
                              # 更新数据存储
-                            services.data_store.bybit_mark_price_data = {
+                            services.data_store.bybit_mark_price = {
                                 "mark_price": mark_price,
                                 "timestamp": formatted_time
                             }
