@@ -2,13 +2,9 @@ import asyncio
 import threading
 import uvicorn
 
-
-from services import okx_ws_u, okx_ws_coin, okx_ws_usdc
-from services import binance_ws_u, binance_ws_coin, binance_ws_usdc
-
-from services import binance_api_u, binance_api_coin, binance_api_usdc
-from services.bybit_ws import subscribe_bybit_funding_rate
-from services.bybit_api import poll_bybit_open_interest
+from services.okx import okx_ws_coin, okx_ws_u, okx_ws_usdc
+from services.binance import binance_api_coin, binance_api_u, binance_api_usdc, binance_ws_coin, binance_ws_u, binance_ws_usdc
+from services.bybit import bybit_ws_u, bybit_ws_coin, bybit_api_u, bybit_api_coin
 
 from api.app import app
 
@@ -26,8 +22,10 @@ async def run_tasks():
         asyncio.to_thread(binance_api_u.poll_binance_open_interest),
         asyncio.to_thread(binance_api_coin.poll_binance_open_interest),
         asyncio.to_thread(binance_api_usdc.poll_binance_open_interest),
-        subscribe_bybit_funding_rate(),
-        asyncio.to_thread(poll_bybit_open_interest)
+        bybit_ws_u.subscribe_bybit_funding_rate(),
+        bybit_ws_coin.subscribe_bybit_funding_rate(),
+        asyncio.to_thread(bybit_api_u.poll_bybit_open_interest),
+        asyncio.to_thread(bybit_api_coin.poll_bybit_open_interest)
     )
 
 def run_binance_ws():

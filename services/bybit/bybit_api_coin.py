@@ -7,8 +7,8 @@ from config import BYBIT_API_URL
 def poll_bybit_open_interest():
     while True:
         try:
-            symbol = "BTCUSDT"
-            category = "linear"
+            symbol = "BTCUSD"
+            category = "inverse"
             interval = "5min"
             limit = 1
             end_time = int(time.time() * 1000)
@@ -37,15 +37,12 @@ def poll_bybit_open_interest():
 
             latest_data = data_list[0]  # 取最新的一条数据
             open_interest = round(float(latest_data["openInterest"]), 2)
+            total_value_billion = round(open_interest / 1_0000_0000, 2)  # 转换为 亿 USDT，保留两位小数
 
             dt_object = datetime.fromtimestamp(int(latest_data["timestamp"]) / 1000, tz=timezone.utc) + timedelta(hours=8)
             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-            # 更新全局数据
-            services.data_store.bybit_open_interest = {
-                "open_interest": open_interest,
-                "timestamp": formatted_time
-            }
+            services.data_store.update_market_data("bybit", "btc", "coin", "open_interest", total_value_billion, formatted_time)
 
         except Exception as e:
             print(f"Error fetching Bybit Open Interest: {e}")

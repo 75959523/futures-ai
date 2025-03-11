@@ -16,7 +16,7 @@ def poll_binance_open_interest():
 
             open_interest = float(data["openInterest"])  # 获取未平仓合约量（张）
             total_value = open_interest * 100  # 计算未平仓总金额（USDT）
-            total_value_billion = round(total_value / 1_0000_0000, 3)  # 转换为 亿 USDT，保留两位小数
+            total_value_billion = round(total_value / 1_0000_0000, 2)  # 转换为 亿 USDT，保留两位小数
 
             dt_object = datetime.fromtimestamp(data["time"] / 1000, tz=timezone.utc) + timedelta(hours=8)
             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")

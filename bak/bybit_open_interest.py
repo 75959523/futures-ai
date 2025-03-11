@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 BYBIT_API_URL = "https://api.bybit.com/v5/market/open-interest"
 
 
-def get_latest_open_interest(symbol="BTCUSDT", category="linear", interval="5min", limit=1):
+def get_latest_open_interest(symbol="BTCUSD", category="inverse", interval="5min", limit=1):
     end_time = int(time.time() * 1000)  # 当前时间（毫秒）
     start_time = end_time - (24 * 60 * 60 * 1000)  # 24 小时前的时间戳
 
