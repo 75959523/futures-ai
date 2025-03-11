@@ -17,12 +17,10 @@ async def subscribe_open_interest():
                 ]
             }
             await ws.send(json.dumps(subscribe_message))
-            # print("已发送订阅请求:", json.dumps(subscribe_message, indent=4))
 
             while True:
                 response = await ws.recv()
                 data = json.loads(response)
-                # print("收到数据:", data)
 
                 if "data" in data:
                     for entry in data["data"]:
@@ -32,11 +30,7 @@ async def subscribe_open_interest():
                         dt_object = datetime.fromtimestamp(ts / 1000, tz=timezone.utc) + timedelta(hours=8)
                         formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-                        services.data_store.okx_open_interest = {
-                            "open_interest": round(oi_ccy, 2),
-                            "timestamp": formatted_time
-                        }
-                        # print("更新 open_interest_data:", services.data_store.open_interest_data)  # 打印更新后的数据
+                        services.data_store.update_market_data("okx", "btc", "usdt", "open_interest", round(oi_ccy, 2), formatted_time)
     except Exception as e:
         print(f"OKX WebSocket 连接或订阅失败: {e}")
 
@@ -53,12 +47,10 @@ async def subscribe_mark_price():
                 ]
             }
             await ws.send(json.dumps(subscribe_message))
-            # print("已发送订阅请求:", json.dumps(subscribe_message, indent=4))
 
             while True:
                 response = await ws.recv()
                 data = json.loads(response)
-                # print("收到数据:", data)
 
                 if "data" in data:
                     for entry in data["data"]:
@@ -69,12 +61,8 @@ async def subscribe_mark_price():
                             dt_object = datetime.fromtimestamp(ts / 1000, tz=timezone.utc) + timedelta(hours=8)
                             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-                            # 更新全局变量
-                            services.data_store.okx_mark_price = {
-                                "mark_price": round(mark_price, 2),
-                                "timestamp": formatted_time
-                            }
-                            # print("更新 mark_price_data:", services.data_store.mark_price_data)
+                            services.data_store.update_market_data("okx", "btc", "usdt", "mark_price",
+                                                                   round(mark_price, 2), formatted_time)
                         except KeyError as e:
                             print(f"数据解析错误，缺少字段: {e}")
                         except ValueError as e:
@@ -90,17 +78,15 @@ async def subscribe_funding_rate():
                 "args": [
                     {
                         "channel": "funding-rate",
-                        "instId": "BTC-USD-SWAP"
+                        "instId": "BTC-USDT-SWAP"
                     }
                 ]
             }
             await ws.send(json.dumps(subscribe_message))
-            # print("已发送订阅请求:", json.dumps(subscribe_message, indent=4))
 
             while True:
                 response = await ws.recv()
                 data = json.loads(response)
-                # print("收到数据:", data)
 
                 if "data" in data:
                     for entry in data["data"]:
@@ -110,11 +96,11 @@ async def subscribe_funding_rate():
                         dt_object = datetime.fromtimestamp(ts / 1000, tz=timezone.utc) + timedelta(hours=8)
                         formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-                        # 更新全局变量
                         services.data_store.okx_funding_rate = {
                             "funding_rate": f"{funding_rate:.6f}%",
                             "timestamp": formatted_time
                         }
-                        # print("更新 funding_rate_data:", services.data_store.okx_funding_rate_data)
+                        services.data_store.update_market_data("okx", "btc", "usdt", "funding_rate",
+                                                               f"{funding_rate:.6f}%", formatted_time)
     except Exception as e:
         print(f"OKX WebSocket 连接或订阅失败: {e}")

@@ -13,7 +13,7 @@ async def subscribe_funding_rate():
             "args": [
                 {
                     "channel": "funding-rate",
-                    "instId": "BTC-USD-SWAP"
+                    "instId": "BTC-USDT-SWAP"
                 }
             ]
         }
