@@ -30,7 +30,7 @@ async def subscribe_open_interest():
                         dt_object = datetime.fromtimestamp(ts / 1000, tz=timezone.utc) + timedelta(hours=8)
                         formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-                        services.data_store.update_market_data("okx", "btc", "usdt", "open_interest", round(oi_ccy, 2), formatted_time)
+                        services.data_store.update_market_data("okx", "btc", "u", "open_interest", round(oi_ccy, 2), formatted_time)
     except Exception as e:
         print(f"OKX WebSocket 连接或订阅失败: {e}")
 
@@ -61,7 +61,7 @@ async def subscribe_mark_price():
                             dt_object = datetime.fromtimestamp(ts / 1000, tz=timezone.utc) + timedelta(hours=8)
                             formatted_time = dt_object.strftime("%Y-%m-%d %H:%M:%S")
 
-                            services.data_store.update_market_data("okx", "btc", "usdt", "mark_price",
+                            services.data_store.update_market_data("okx", "btc", "u", "mark_price",
                                                                    round(mark_price, 2), formatted_time)
                         except KeyError as e:
                             print(f"数据解析错误，缺少字段: {e}")
@@ -100,7 +100,7 @@ async def subscribe_funding_rate():
                             "funding_rate": f"{funding_rate:.6f}%",
                             "timestamp": formatted_time
                         }
-                        services.data_store.update_market_data("okx", "btc", "usdt", "funding_rate",
+                        services.data_store.update_market_data("okx", "btc", "u", "funding_rate",
                                                                f"{funding_rate:.6f}%", formatted_time)
     except Exception as e:
         print(f"OKX WebSocket 连接或订阅失败: {e}")

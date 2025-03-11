@@ -1,5 +1,3 @@
-import json
-
 
 market_data = {
     "okx": {},
@@ -7,8 +5,16 @@ market_data = {
     "bybit": {}
 }
 
-def update_market_data(exchange, coin, contract_type, data_type, value, timestamp):
-
+def update_market_data(exchange: str, coin: str, contract_type: str, data_type: str, value, timestamp):
+    """
+    更新市场数据
+    :param exchange: 交易所名称 (okx, binance, bybit)
+    :param coin: 币种 (btc, eth, sol, etc.)
+    :param contract_type: 合约类型 (u, coin, usdc)
+    :param data_type: 数据类型 (mark_price, open_interest, funding_rate)
+    :param value: 数据值
+    :param timestamp: 时间戳 (格式 "YYYY-MM-DD HH:MM:SS")
+    """
     if exchange not in market_data:
         market_data[exchange] = {}
 
