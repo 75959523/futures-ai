@@ -1,12 +1,14 @@
 import asyncio
 import threading
 import uvicorn
+from starlette.staticfiles import StaticFiles
 
 from services.okx import okx_ws_coin, okx_ws_u, okx_ws_usdc
 from services.binance import binance_api_coin, binance_api_u, binance_api_usdc, binance_ws_coin, binance_ws_u, binance_ws_usdc
 from services.bybit import bybit_ws_u, bybit_ws_coin, bybit_api_u, bybit_api_coin
 
 from api.app import app
+app.mount("/web", StaticFiles(directory="web"), name="web")
 
 async def run_tasks():
     await asyncio.gather(

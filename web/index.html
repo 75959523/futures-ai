@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加密货币数据监控面板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 8px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 4px 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        .header h1 {
+            color: #00ff88;
+            font-size: 1.6em;
+        }
+
+        .summary-section {
+            background-color: #2a2a2a;
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+
+        .summary-title {
+            color: #00ff88;
+            margin-bottom: 4px;
+            font-size: 1.1em;
+        }
+
+        .summary-card {
+            background-color: #333;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            color: #00ff88;
+            margin-bottom: 4px;
+            font-size: 0.95em;
+        }
+
+        .exchange-section {
+            background-color: #2a2a2a;
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+
+        .exchange-title {
+            color: #00ff88;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .data-card {
+            background-color: #333;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .data-card h3 {
+            color: #00ff88;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+            border-bottom: 1px solid #444;
+            padding-bottom: 4px;
+        }
+
+        .data-item {
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+        }
+
+        .data-item.highlight {
+            background-color: #383838;
+            padding: 3px 6px;
+            border-radius: 3px;
+            margin: 8px -4px;
+        }
+
+        .data-label {
+            color: #888;
+        }
+
+        .data-value {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .data-value.positive {
+            color: #00ff88;
+        }
+
+        .data-value.negative {
+            color: #ff4444;
+        }
+
+        .highlight {
+            color: #00ff88;
+        }
+
+        .total-card {
+            background-color: #404040;
+        }
+
+        /* 移动端响应式设计 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 5px;
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .header h1 {
+                font-size: 1.3em;
+            }
+
+            .exchange-title {
+                font-size: 1em;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-card {
+                margin-bottom: 4px;
+            }
+
+            .data-card:not(:last-child) {
+                border-bottom: 1px solid #444;
+                padding-bottom: 8px;
+            }
+
+            .data-item {
+                font-size: 0.95em;
+            }
+
+            .total-card {
+                border: 1px solid #00ff88;
+            }
+        }
+
+        /* 平板和中等屏幕 */
+        @media screen and (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 900px;
+            }
+
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+        }
+
+        /* 横屏手机 */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 1.1em;
+            }
+
+            .data-card {
+                padding: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>加密货币数据监控面板</h1>
+        </header>
+
+        <section class="summary-section">
+            <h2 class="summary-title">总体概览</h2>
+            <div class="summary-card">
+                <h3>总未平仓合约量</h3>
+                <div class="data-value highlight">0 亿</div>
+            </div>
+        </section>
+
+        <!-- OKX 交易所数据 -->
+        <section class="exchange-section">
+            <h2 class="exchange-title">OKX 交易所</h2>
+            <div class="data-grid">
+                <!-- U本位 -->
+                <div class="data-card">
+                    <h3>U本位合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value positive">+0.01%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- 币本位 -->
+                <div class="data-card">
+                    <h3>币本位合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value negative">-0.01%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- USDC -->
+                <div class="data-card">
+                    <h3>USDC合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value">0.00%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- 交易所汇总 -->
+                <div class="data-card total-card">
+                    <h3>交易所汇总</h3>
+                    <div class="data-item">
+                        <span class="data-label">总未平仓合约量</span>
+                        <span class="data-value">0 亿</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Binance 交易所数据 -->
+        <section class="exchange-section">
+            <h2 class="exchange-title">Binance 交易所</h2>
+            <div class="data-grid">
+                <!-- U本位 -->
+                <div class="data-card">
+                    <h3>U本位合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value positive">+0.01%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- 币本位 -->
+                <div class="data-card">
+                    <h3>币本位合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value negative">-0.01%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- USDC -->
+                <div class="data-card">
+                    <h3>USDC合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value">0.00%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- 交易所汇总 -->
+                <div class="data-card total-card">
+                    <h3>交易所汇总</h3>
+                    <div class="data-item">
+                        <span class="data-label">总未平仓合约量</span>
+                        <span class="data-value">0 亿</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bybit 交易所数据 -->
+        <section class="exchange-section">
+            <h2 class="exchange-title">Bybit 交易所</h2>
+            <div class="data-grid">
+                <!-- U本位 -->
+                <div class="data-card">
+                    <h3>U本位合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value positive">+0.01%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- 币本位 -->
+                <div class="data-card">
+                    <h3>币本位合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value negative">-0.01%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- USDC -->
+                <div class="data-card">
+                    <h3>USDC合约</h3>
+                    <div class="data-item highlight">
+                        <span class="data-label">资金费率</span>
+                        <span class="data-value">0.00%</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">未平仓合约量</span>
+                        <span class="data-value">0 BTC</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">标记价格</span>
+                        <span class="data-value">$0.00</span>
+                    </div>
+                </div>
+                <!-- 交易所汇总 -->
+                <div class="data-card total-card">
+                    <h3>交易所汇总</h3>
+                    <div class="data-item">
+                        <span class="data-label">总未平仓合约量</span>
+                        <span class="data-value">0 亿</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+<script src="monitor.js"></script>
+</html>
